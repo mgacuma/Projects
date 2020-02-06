@@ -1,0 +1,140 @@
+import java.util.*;
+
+public class Evaluator {
+	private Stack<Operand> opdStack;
+	private Stack<Operator> oprStack;
+	
+	public Evaluator(){
+		opdStack = new Stack<Operand>();
+		oprStack = new Stack<Operator>();
+	}
+	
+	public int eval(String expr){
+		String tok;
+		oprStack.push(new Operator("#"));
+			
+			delimiters = "+_*/#";
+		StringTokenizer st = new StringTokenizer(expr, delimiters, true);
+		
+		while(st.hasMoreTokens()){
+			if(!(tok=st.nextToken()).equals(" ")){
+				if(Operand.check(tok)){
+					opdStack.push(new Operand(tok));
+				}
+				else {
+					if(!Operator.check(tok)){
+						System.out.println("*****invalid token*****");
+						System.exit(1);
+					}
+				
+					Operator newOpr = (Operator) operators.get(tok);
+					while(((Operator)oprStack.peek()).priority()>=newOpr.priority()){
+						Operator oldOpr = ((Operator)oprStack.pop());
+						Operand op2 = (Operand)opdStack.pop();
+						Operand op1 = (Operand)opdStack.pop();
+						opdStack.push(oldOpr.execute(op1, op2));
+					}
+					oprStack.push(newOpr);
+				}
+			}	
+		}
+	} 
+}
+
+
+public class Operand(String tok){
+	private int value;
+	
+	public Operand(String tok){
+		if (this.check(tok)){
+			this.value = Integer.parseint(tok);
+		}
+	}
+	
+	public Operand(int value){
+		this.value = value;
+	}
+
+	boolean check(String tok){
+		bool valid = false;
+		try {
+			Integer.parseint(tok);
+			valid = true;
+		}
+		catch (NumberFormatException nfe) {
+			System.out.println("*****NFE*****");
+		}
+		return valid;
+	}
+	
+	public int getValue(){
+		return this.value
+	}
+}
+
+
+public Abstract class Operator{
+	
+	abstract int priority(){
+		return this.priority;
+	}
+	
+	boolean check( String tok){
+		bool validTok = false;
+		if ( tok == "+" || tok == "-" || tok == "*" || tok == "/"){
+			validTok = true;
+		}
+	return validTok;
+	}
+	
+	abstract Operand execute(Operand opd1, Operand opd2);
+	
+}
+
+public class AdditionOperator extends Operator (Operand opd1, Operand opd2){
+	private int priority = 2;
+	public Operand execute(Operand opd1, opd2){
+		Operand newOpd = new Operand(opd1.getvalue + opd2.getvalue);
+		return newOpd;
+	}
+}
+
+public class SubtractionOperator extends Operator (Operand opd1, Operand opd2){
+	private int priority = 2;
+	public Operand execute(Operand opd1, opd2){
+		Operand newOpd = new Operand(opd2.getvalue - opd1.getvalue);
+		return newOpd;
+	}
+}
+
+public class MultiplicationOperator extends Operator (Operand opd1, Operand opd2){
+	private int priority = 3;
+	public Operand execute(Operand opd1, opd2){
+		Operand newOpd = new Operand(opd1.getvalue * opd2.getvalue);
+		return newOpd;
+	}
+}
+
+public class DivisionOperator extends Operator (Operand opd1, Operand opd2){
+	private int priority = 3;
+	public Operand execute(Operand opd1, opd2){
+		try{
+			Operand newOpd = new Operand(opd1.getvalue / opd2.getvalue);
+		}
+		catch(DivisionByZeroException dbze){
+			System.out.println("*****DBZE*****");
+		}
+		return newOpd;
+	}
+
+	static final HashMap operators = new HashMap();
+	operators.put("+"), new AdditionOperator());
+	operators.put("-"), new SubtractionOperator());
+	operators.put("*"), new MultiplicationOperator());
+	operators.put("/"), new DivisionOperator());
+
+}
+
+
+
+
