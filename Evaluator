@@ -72,43 +72,46 @@ public class Operand{
 }
 
 
-public Abstract class Operator{
+abstract class Operator{
+	int priority;
 	
-	abstract int priority(){
-		return this.priority;
-	}
+	abstract int priority();
 	
-	boolean check( String tok){
-		bool validTok = false;
-		if ( tok == "+" || tok == "-" || tok == "*" || tok == "/"){
+	boolean check (String tok){
+		boolean validTok = false;
+		if (tok == "+" || tok == "-" || tok == "*" || tok == "/"){
 			validTok = true;
 		}
-	return validTok;
+		return validTok;
 	}
 	
-	abstract Operand execute(Operand opd1, Operand opd2);
-	
+	abstract Operand execute();
 }
 
-public class AdditionOperator extends Operator (Operand opd1, Operand opd2){
+
+
+class AdditionOperator extends Operator{
 	private int priority = 2;
-	public Operand execute(Operand opd1, opd2){
+	
+	public Operand execute(Operand opd1, Operand opd2){
 		Operand newOpd = new Operand(opd1.getvalue + opd2.getvalue);
 		return newOpd;
 	}
 }
 
-public class SubtractionOperator extends Operator (Operand opd1, Operand opd2){
+class SubtractionOperator extends Operator{
 	private int priority = 2;
-	public Operand execute(Operand opd1, opd2){
-		Operand newOpd = new Operand(opd2.getvalue - opd1.getvalue);
+	
+	public Operand execute(Operand opd1, Operand opd2){
+		Operand newOpd = new Operand(opd1.getvalue - opd2.getvalue);
 		return newOpd;
 	}
 }
 
-public class MultiplicationOperator extends Operator (Operand opd1, Operand opd2){
+class MultiplicationOperator extends Operator{
 	private int priority = 3;
-	public Operand execute(Operand opd1, opd2){
+	
+	public Operand execute(Operand opd1, Operand opd2){
 		Operand newOpd = new Operand(opd1.getvalue * opd2.getvalue);
 		return newOpd;
 	}
@@ -118,22 +121,22 @@ public class DivisionOperator extends Operator (Operand opd1, Operand opd2){
 	private int priority = 3;
 	public Operand execute(Operand opd1, opd2){
 		try{
-			Operand newOpd = new Operand(opd1.getvalue / opd2.getvalue);
+			Operand newOpd = new Operand(opd1.getValue / opd2.getValue);
 		}
 		catch(DivisionByZeroException dbze){
 			System.out.println("*****DBZE*****");
 		}
 		return newOpd;
 	}
+}
+	
+
+
 
 	static final HashMap operators = new HashMap();
 	operators.put("+"), new AdditionOperator());
 	operators.put("-"), new SubtractionOperator());
 	operators.put("*"), new MultiplicationOperator());
 	operators.put("/"), new DivisionOperator());
-
-}
-
-
 
 
