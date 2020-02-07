@@ -13,13 +13,14 @@ public class Evaluator {
 		String tok;
 		oprStack.push(new Operator("#"));
 			
-			delimiters = "+_*/#";
+		String delimiters = "+_*/#";
 		StringTokenizer st = new StringTokenizer(expr, delimiters, true);
 		
 		while(st.hasMoreTokens()){
 			if(!(tok=st.nextToken()).equals(" ")){
 				if(Operand.check(tok)){
-					opdStack.push(new Operand(tok));
+					Operand newOpd = new Operand(tok);
+					opdStack.push(newOpd));
 				}
 				else {
 					if(!Operator.check(tok)){
@@ -42,23 +43,21 @@ public class Evaluator {
 }
 
 
-public class Operand(String tok){
+public class Operand{
 	private int value;
 	
 	public Operand(String tok){
-		if (this.check(tok)){
-			this.value = Integer.parseint(tok);
-		}
+		this.value = Integer.parseInt(tok);	
 	}
 	
 	public Operand(int value){
 		this.value = value;
 	}
 
-	boolean check(String tok){
+	public boolean check(String tok){
 		bool valid = false;
 		try {
-			Integer.parseint(tok);
+			Integer.parseInt(tok);
 			valid = true;
 		}
 		catch (NumberFormatException nfe) {
